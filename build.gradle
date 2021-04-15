@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'org.chyccs.phase-verifier'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    implementation('junit:junit:4.13')
+//    implementation('org.hamcrest:hamcrest:2.1')
+//    testImplementation('junit:junit:4.13')
+//    testImplementation('org.hamcrest:hamcrest:2.1')
+//
+//    compileOnly 'org.projectlombok:lombok:1.18.12'
+//    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+//    testCompileOnly 'org.projectlombok:lombok:1.18.12'
+//    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,4 @@
+rootProject.name = 'phase-verifier'
+include 'core'
+include 'example'
+
