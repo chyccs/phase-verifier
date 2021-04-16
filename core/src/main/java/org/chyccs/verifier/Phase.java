@@ -1,7 +1,5 @@
 package org.chyccs.verifier;
 
-import lombok.var;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
@@ -124,7 +122,7 @@ public class Phase<T> extends PhaseVerifier<T> {
     }
 
     public final <R> PhaseWithPrevious<R, Phase<T>> then(Callable<R> callable) throws ExecutionException, InterruptedException {
-        var verifier = new PhaseWithPrevious<>(callable, this);
+        PhaseWithPrevious<R, Phase<T>> verifier = new PhaseWithPrevious<>(callable, this);
         verifier.execute();
         return verifier;
     }

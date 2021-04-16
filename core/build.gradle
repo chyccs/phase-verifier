@@ -1,9 +1,11 @@
 plugins {
-    id 'java'
+    id 'java-library'
+    id 'maven'
+    id 'signing'
 }
 
-group 'org.chyccs.phase-verifier'
-version '0.0.1-SNAPSHOT'
+group 'io.github.chyccs'
+version '0.0.2'
 
 repositories {
     mavenCentral()
@@ -22,4 +24,73 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+signing {
+    useInMemoryPgpKeys(file(getProperty("signing.secretKeyRingFile")).text, getProperty("signing.password"))
+    sign configurations.archives
+    //sign publishing.publications.mavenJava
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment)
+            }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: getProperty("upload.username"), password: getProperty("upload.password"))
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: getProperty("upload.username"), password: getProperty("upload.password"))
+            }
+
+            pom.project {
+                name 'phase-verifier'
+                packaging 'jar'
+                groupId = 'io.github.chyccs'
+                artifactId = 'phase-verifier'
+                // optionally artifactId can be defined here
+                description 'Library that enables step-by-step verification using junit.'
+                url 'https://github.com/chyccs/phase-verifier'
+
+                scm {
+                    connection 'scm:git:https://github.com/chyccs/phase-verifier.git'
+                    developerConnection 'scm:git:https://github.com/chyccs/phase-verifier.git'
+                    url 'scm:git:https://github.com/chyccs/phase-verifier'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'chyccs'
+                        name 'Choi Hwa-Young'
+                        email 'chyccs@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
